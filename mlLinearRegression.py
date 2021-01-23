@@ -1,21 +1,32 @@
-import tensorflow as tf
+from tensorflow import model
+from tensorflow import Adam
+from tensorflow import SGD
 from tensorflow import keras
+# import pandas as pd
+i# mport matplotlib.pyplot as plt
+from IPython.display import clear_output
+# from six.moves import urllib
+# import tensorboard
+# from datetime import datetime
+
 import numpy as np
 
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(1)
-])
+#model design for neural network
+model = keras.Sequential([keras.layers.Dense(units=1, input_shape=[1])])
 
-xs = np.array(["2.0","4.0","6.0","8.0","10.0"], np.float64)
-print(xs)
-ys = np.array(["-2.0","-4.0","-6.0","-8.0","-10.0"], np.float16)
-print(ys)
+# Define the Keras TensorBoard callback.
+# logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+# tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
 
-loss_fn = tf.keras.losses.MeanSquaredError()
-optim_fn = tf.keras.optimizers.SGD()
+#loss method of understanding the results of each epoch, and optimizer for understanding what to try next to optimize next result.
+model.compile(optimizer="SGD", loss="MeanSquaredError")
+Adam = tf.keras.optimizers.SGD(learning_rate=1000000)
+#model data for training
+xs = np.array([-5.0, -4.0, -3.0,-2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0], dtype=float)
+ys = np.array([-11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0], dtype=float)
 
-model.compile(optimizer=optim_fn, loss=loss_fn)
+#training loop for model, figure out how to fit x values into y values
+model.fit(xs, ys, epochs=1000, validation_split=0.2, verbose=1, callbacks=[tensorboard_callback])
 
-model.fit(xs, ys, epochs=500, verbose=0, validation_split=0.2)
-
-print(model.predict([1]))
+#prediction should be or close to 19
+print(model.predict([10.0]))
